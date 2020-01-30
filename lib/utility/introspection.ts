@@ -18,7 +18,8 @@ export function getTypeOf(t: DeepTypeRef | TypeRef): TypeRef {
 }
 
 export function getFilenameOf(
-  type: DeepTypeRef | TypeRef | Description
+  type: DeepTypeRef | TypeRef | Description,
+  ext: any = 'html'
 ): string {
   const name =
     type.kind === LIST || type.kind === NON_NULL
@@ -26,10 +27,10 @@ export function getFilenameOf(
       : (type as Description).name.toLowerCase();
 
   if (name[0] === "_" && name[1] === "_") {
-    return name.slice(2) + ".spec.html";
+    return name.slice(2) + `.spec.${ext}`;
   }
 
-  return name + ".doc.html";
+  return name + `.doc.${ext}`;
 }
 
 const fullTypeFragment = `

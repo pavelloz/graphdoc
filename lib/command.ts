@@ -39,6 +39,7 @@ export interface IFlags {
   schemaFile: string;
   plugins: string[];
   template: string;
+  extension: string;
   data: any;
   output: string;
   force: boolean;
@@ -110,6 +111,7 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
       {}
     ),
     new ValueFlag("baseUrl", ["-b", "--base-url"], "Base url for templates."),
+    new ValueFlag("extension", ["-n", "--extension"], "Output files extension, default: html"),
     new BooleanFlag(
       "force",
       ["-f", "--force"],
@@ -177,6 +179,9 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
       // Render index.html
       output.info("render", "index");
       await this.renderFile(projectPackageJSON, partials, plugins);
+
+
+      console.log(schema.types)
 
       // Render types
       const renderTypes = ([] as any[])
@@ -345,7 +350,8 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
       plugins,
       type
     );
-    const file = type ? getFilenameOf(type) : "index.html";
+    const ext = projectPackageJSON.graphdoc.extension || 'html';
+    const file = type ? getFilenameOf(type, ext) : `index.${ext}`;
     const filePath = path.resolve(projectPackageJSON.graphdoc.output, file);
     return writeFile(
       filePath,

@@ -31,9 +31,9 @@ ul.require-by a {
 
 ul.require-by a:hover {
     text-decoration: none;
-    background-color: #f0f8fc;
+    background-color: rgba(0, 87, 69, 0.1);
     border-color: #d8dde6;
-    border-left-color: #005fb2;
+    border-left-color: rgb(0, 87, 69);
 }
 
 ul.require-by a em {

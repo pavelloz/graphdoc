@@ -1,5 +1,5 @@
 {
-  "name": "@2fd/graphdoc",
+  "name": "graphdocs",
   "version": "2.4.0",
   "description": "Static page generator for documenting GraphQL Schema",
   "main": "bin/graphdoc",
@@ -7,17 +7,14 @@
     "graphdoc": "./bin/graphdoc.js"
   },
   "scripts": {
-    "sass": "node-sass -w --output-style compressed template/slds/styles/graphdoc.scss > template/slds/styles/graphdoc.css",
+    "watch": "npx webpack-cli -w",
+    "build": "NODE_ENV=production npx webpack-cli",
     "compile": "tsc -p .",
     "declaration": "tsc -d -p tsconfig.json",
-    "doc.github": "node bin/graphdoc.js -c example.github.json -f -v",
+    "doc.github": "node bin/graphdoc.js -c example.github.json -f -n html",
+    "doc.pos": "node bin/graphdoc.js -s http://127.0.0.1:8080/schema.graphql -f -n html",
     "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/2fd/graphdoc.git"
-  },
-  "author": "Fede Ramirez <i@2fd.me>",
   "license": "MIT",
   "jest": {
     "testRegex": "\\.(test|spec)\\.js$",
@@ -29,7 +26,6 @@
     ]
   },
   "devDependencies": {
-    "@salesforce-ux/design-system": "2.2.1",
     "@types/bluebird": "^3.0.37",
     "@types/chai": "^3.4.34",
     "@types/fs-extra": "0.0.32",
@@ -42,12 +38,26 @@
     "@types/node": "^6.0.32",
     "@types/request": "^2.47.0",
     "@types/striptags": "^3.1.1",
+    "autoprefixer": "^9.7.4",
     "chai": "^4.2.0",
+    "css-loader": "^3.4.2",
+    "css-mqpacker": "^7.0.0",
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "jest": "^25.1.0",
-    "node-sass": "^4.12.0",
-    "typescript": "^3.5.2"
+    "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "pkg-dir": "^4.2.0",
+    "postcss": "^7.0.26",
+    "postcss-csso": "^4.0.0",
+    "postcss-fixes": "^2.0.1",
+    "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
+    "request-promise": "^4.2.5",
+    "terser-webpack-plugin": "^2.3.2",
+    "typescript": "^3.5.2",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   },
   "dependencies": {
     "@2fd/command": "^1.1.2",
@@ -64,8 +74,8 @@
     "word-wrap": "^1.2.3"
   },
   "graphdoc": {
-    "schemaFile": "./test/github.json",
-    "output": "./gh-pages/github",
+    "schemaFile": "http://localhost:8080/schema.graphql",
+    "output": "./gh-pages/pos",
     "baseUrl": "./"
   }
 }

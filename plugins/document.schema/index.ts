@@ -23,14 +23,12 @@ import {
 } from "../../lib/utility";
 
 const MAX_CODE_LEN = 80;
-// const MAX_COMMENT_LEN = 80;
 
 export default class SchemaPlugin extends Plugin implements PluginInterface {
   private html: HTML;
 
   getHeaders(): string[] {
     return [
-      '<link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">',
       '<link type="text/css" rel="stylesheet" href="./assets/code.css" />',
       '<script src="./assets/line-link.js"></script>'
     ];
@@ -166,39 +164,6 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
     ]);
   }
 
-  deprecated(fieldOrEnumVal: Field | EnumValue): string {
-    if (!fieldOrEnumVal.isDeprecated) {
-      return "";
-    }
-
-    if (!fieldOrEnumVal.deprecationReason) {
-      return this.html.keyword("@deprecated");
-    }
-
-    return (
-      this.html.keyword("@deprecated") +
-      "( reason: " +
-      this.html.value('"' + fieldOrEnumVal.deprecationReason + '" ') +
-      " )"
-    );
-  }
-
-  deprecatedLength(fieldOrEnumVal: Field | EnumValue): number {
-    if (!fieldOrEnumVal.isDeprecated) {
-      return 0;
-    }
-
-    if (!fieldOrEnumVal.deprecationReason) {
-      return "@deprecated".length;
-    }
-
-    return (
-      '@deprecated( reason: "'.length +
-      fieldOrEnumVal.deprecationReason.length +
-      '" )'.length
-    );
-  }
-
   description(description: string | null): string[] {
     if (description) {
       return wrap(description, {
@@ -227,7 +192,7 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
   enum(type: SchemaType): string {
     const reduceEnumValues = (lines: string[], enumValue: EnumValue) =>
       lines.concat([""], this.description(enumValue.description), [
-        this.html.property(enumValue.name) + this.deprecated(enumValue)
+        this.html.property(enumValue.name)
       ]);
 
     return (
@@ -250,29 +215,26 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
       fieldDescription.push(this.html.comment(""));
     }
 
+
     const fieldDefinition =
       field.args.length > 0 && this.fieldLength(field) > MAX_CODE_LEN
         ? // Multiline definition:
           // fieldName(
           //     argumentName: ArgumentType, \n ...
-          // ): ReturnType [@deprecated...]
+          // ): ReturnType
           [
             this.html.property(field.name) + "(",
             ...this.argumentsMultiline(field).map(l => this.html.tab(l)),
             "): " +
-              this.html.useIdentifier(field.type, this.url(field.type)) +
-              " " +
-              this.deprecated(field)
+              this.html.useIdentifier(field.type, this.url(field.type))
           ]
         : // Single line
-          // fieldName(argumentName: ArgumentType): ReturnType [@deprecated...]
+          // fieldName(argumentName: ArgumentType): ReturnType
           [
             this.html.property(field.name) +
               this.arguments(field) +
               ": " +
-              this.html.useIdentifier(field.type, this.url(field.type)) +
-              " " +
-              this.deprecated(field)
+              this.html.useIdentifier(field.type, this.url(field.type))
           ];
 
     return ([] as string[])
@@ -289,8 +251,7 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
       this.argumentsLength(field) +
       ": ".length +
       this.html.useIdentifierLength(field) +
-      " ".length +
-      this.deprecatedLength(field)
+      " ".length
     );
   }
 
@@ -298,6 +259,7 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
     let fields = "";
     fields += this.html.line();
     fields += (type.fields || [])
+      .filter(field => !field.isDeprecated)
       .map(field => this.field(field))
       .join(this.html.line());
 
@@ -334,7 +296,7 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
       .concat([
         this.html.property(arg.name) +
           ": " +
-          this.html.useIdentifier(arg.type, this.url(arg.type)) // + ' ' + this.deprecated(arg)
+          this.html.useIdentifier(arg.type, this.url(arg.type))
       ])
       .map(line => this.html.line(this.html.tab(line)))
       .join("");
@@ -439,33 +401,7 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
     definition += this.html.line("}");
 
     return definition;
-    /* .concat(
-             schema.directives
-                 .map((directive) => {
-                     return this.html.line(this.html.comment('DIRECTIVE')) +
-                         this.description(directive.description)
-                         .map(line => this.html.line(line))
-                         .join('') +
-                         this.code(directive.name);
-                 }),
-             schema.types
-                 .sort((a: SchemaType, b: SchemaType) => {
-                     return order[a.kind].localeCompare(order[b.kind]);
-                 })
-                 .map((type) => {
-                     return this.html.line(this.html.comment(type.kind)) +
-                         this.description(type.description)
-                         .map(line => this.html.line(line))
-                         .join('') +
-                         this.code(type.name);
-                 }))*/
 
-    /* return [this.schemaDefinition(schema)]
-             .concat(
-             directives.map(directive => this.directive(directive)),
-             types.map((type) => this.type(type) as string)
-             )
-             .join('\n\n') + '\n';*/
   }
 
   union(type: SchemaType): string {
