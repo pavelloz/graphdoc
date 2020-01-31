@@ -8,7 +8,6 @@
   },
   "scripts": {
     "compile": "tsc -p .",
-    "postinstall": "npm run compile",
     "declaration": "tsc -d -p tsconfig.json",
     "doc.github": "node bin/graphdoc.js -c example.github.json -f -n html",
     "doc.pos": "node bin/graphdoc.js -s http://127.0.0.1:8080/schema.graphql -f -n html",
