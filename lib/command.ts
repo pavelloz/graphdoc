@@ -348,7 +348,7 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
       type
     );
     const ext = projectPackageJSON.graphdoc.extension || 'html';
-    const file = type ? getFilenameOf(type, ext) : `index.${ext}`;
+    const file = type ? getFilenameOf(type, ext) : `graphql.${ext}`;
     const filePath = path.resolve(projectPackageJSON.graphdoc.output, file);
     return writeFile(
       filePath,
