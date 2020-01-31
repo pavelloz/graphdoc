@@ -21,7 +21,6 @@ export const idlSchemaLoader: SchemaLoader = async (
   let schemaPath;
   if (options.schemaFile.indexOf('http') === 0) {
     schemaPath = await downloadSchema(options.schemaFile);
-    console.log('schemaPath', schemaPath);
   } else {
     schemaPath = resolve(options.schemaFile);
   }

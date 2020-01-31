@@ -180,9 +180,6 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
       output.info("render", "index");
       await this.renderFile(projectPackageJSON, partials, plugins);
 
-
-      console.log(schema.types)
-
       // Render types
       const renderTypes = ([] as any[])
         .concat(schema.types || [])
