@@ -29,8 +29,8 @@ export default class SchemaPlugin extends Plugin implements PluginInterface {
 
   getHeaders(): string[] {
     return [
-      '<link type="text/css" rel="stylesheet" href="./assets/code.css" />',
-      '<script src="./assets/line-link.js"></script>'
+      '<link type="text/css" rel="stylesheet" href="/assets/code.css" />',
+      '<script src="/assets/line-link.js"></script>'
     ];
   }
 

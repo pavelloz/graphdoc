@@ -130,7 +130,7 @@ var RequireByPlugin = /** @class */ (function (_super) {
     };
     RequireByPlugin.prototype.getHeaders = function () {
         return [
-            '<link type="text/css" rel="stylesheet" href="./assets/require-by.css" />'
+            '<link type="text/css" rel="stylesheet" href="/assets/require-by.css" />'
         ];
     };
     return RequireByPlugin;

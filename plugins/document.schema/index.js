@@ -34,8 +34,8 @@ var SchemaPlugin = /** @class */ (function (_super) {
     }
     SchemaPlugin.prototype.getHeaders = function () {
         return [
-            '<link type="text/css" rel="stylesheet" href="./assets/code.css" />',
-            '<script src="./assets/line-link.js"></script>'
+            '<link type="text/css" rel="stylesheet" href="/assets/code.css" />',
+            '<script src="/assets/line-link.js"></script>'
         ];
     };
     SchemaPlugin.prototype.getAssets = function () {
