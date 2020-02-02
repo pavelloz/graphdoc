@@ -17,7 +17,7 @@ describe("pĺugins/navigation.directive#NavigationDirectives", function () {
                 items: [
                     {
                         text: "AddCommentInput",
-                        href: "/addcommentinput.doc.html",
+                        href: "/addcommentinput.html",
                         isActive: false
                     }
                 ]

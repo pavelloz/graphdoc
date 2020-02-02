@@ -30,7 +30,7 @@ export function getFilenameOf(
     return name.slice(2) + `.spec.${ext}`;
   }
 
-  return name + `.doc.${ext}`;
+  return name + `.${ext}`;
 }
 
 const fullTypeFragment = `
