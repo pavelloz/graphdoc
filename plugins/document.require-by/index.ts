@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import striptags from "striptags";
 import {
   DocumentSectionInterface,
@@ -50,10 +49,6 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
         }
       });
     }
-  }
-
-  getAssets() {
-    return [resolve(__dirname, "require-by.css")];
   }
 
   getDependencies(type: SchemaType): string[] {
@@ -147,12 +142,6 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
             .join("") +
           "</ul>"
       }
-    ];
-  }
-
-  getHeaders(): string[] {
-    return [
-      '<link type="text/css" rel="stylesheet" href="/assets/require-by.css" />'
     ];
   }
 }

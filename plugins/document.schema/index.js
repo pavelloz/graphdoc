@@ -23,7 +23,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = require("path");
 var word_wrap_1 = __importDefault(require("word-wrap"));
 var utility_1 = require("../../lib/utility");
 var MAX_CODE_LEN = 80;
@@ -32,18 +31,6 @@ var SchemaPlugin = /** @class */ (function (_super) {
     function SchemaPlugin() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SchemaPlugin.prototype.getHeaders = function () {
-        return [
-            '<link type="text/css" rel="stylesheet" href="/assets/code.css" />',
-            '<script src="/assets/line-link.js"></script>'
-        ];
-    };
-    SchemaPlugin.prototype.getAssets = function () {
-        return [
-            path_1.resolve(__dirname, "assets/code.css"),
-            path_1.resolve(__dirname, "assets/line-link.js")
-        ];
-    };
     SchemaPlugin.prototype.getDocuments = function (buildForType) {
         this.html = new utility_1.HTML();
         var code = this.code(buildForType);

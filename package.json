@@ -7,6 +7,7 @@
     "graphdoc": "./bin/graphdoc.js"
   },
   "scripts": {
+    "watch": "tsc -w -p .",
     "compile": "tsc -p .",
     "declaration": "tsc -d -p tsconfig.json",
     "doc.github": "node bin/graphdoc.js -c example.github.json -f -n html",

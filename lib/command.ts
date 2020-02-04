@@ -19,7 +19,7 @@ import {
   jsonSchemaLoader,
   jsSchemaLoader
 } from "./schema-loader";
-import { createData, getFilenameOf, Output, Plugin } from "./utility";
+import { createData, getFilenameOf, Output } from "./utility";
 import {
   createBuildDirectory,
   readFile,
@@ -149,12 +149,6 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
         output.info("use plugin", plugin)
       );
 
-      // Collect assets
-      const assets: string[] = await Plugin.collectAssets(plugins);
-      assets.forEach(asset =>
-        output.info("use asset", path.relative(process.cwd(), asset))
-      );
-
       // Ensure Ourput directory
       output.info(
         "output directory",
@@ -167,9 +161,7 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
 
       // Create Output directory
       await createBuildDirectory(
-        projectPackageJSON.graphdoc.output,
-        projectPackageJSON.graphdoc.template,
-        assets
+        projectPackageJSON.graphdoc.output
       );
 
       // Collect partials
@@ -340,19 +332,21 @@ export class GraphQLDocumentGenerator extends Command<IFlags, {}> {
     partials: IPartials,
     plugins: PluginInterface[],
     type?: TypeRef
-  ) {
-    const templateData = await createData(
-      projectPackageJSON,
-      graphdocPackageJSON,
-      plugins,
-      type
-    );
+    ) {
+      const templateData = await createData(
+          projectPackageJSON,
+          graphdocPackageJSON,
+          plugins,
+          type
+        );
     const ext = projectPackageJSON.graphdoc.extension || 'html';
+
     const file = type ? getFilenameOf(type, ext) : `graphql.${ext}`;
     const filePath = path.resolve(projectPackageJSON.graphdoc.output, file);
+
     return writeFile(
       filePath,
-      render(partials.index as string, templateData, partials)
+      render(partials.index as string, templateData, partials, ['<%', '%>']) // erb syntax instead of liquid-like
     );
   }
 }

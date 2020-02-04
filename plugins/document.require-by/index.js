@@ -16,7 +16,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = require("path");
 var striptags_1 = __importDefault(require("striptags"));
 var utility_1 = require("../../lib/utility");
 var RequireByPlugin = /** @class */ (function (_super) {
@@ -49,9 +48,6 @@ var RequireByPlugin = /** @class */ (function (_super) {
         }
         return _this;
     }
-    RequireByPlugin.prototype.getAssets = function () {
-        return [path_1.resolve(__dirname, "require-by.css")];
-    };
     RequireByPlugin.prototype.getDependencies = function (type) {
         var deps = [];
         if (Array.isArray(type.interfaces) && type.interfaces.length > 0) {
@@ -126,11 +122,6 @@ var RequireByPlugin = /** @class */ (function (_super) {
                         .join("") +
                     "</ul>"
             }
-        ];
-    };
-    RequireByPlugin.prototype.getHeaders = function () {
-        return [
-            '<link type="text/css" rel="stylesheet" href="/assets/require-by.css" />'
         ];
     };
     return RequireByPlugin;

@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import wrap from "word-wrap";
 import {
   Directive,
@@ -26,20 +25,6 @@ const MAX_CODE_LEN = 80;
 
 export default class SchemaPlugin extends Plugin implements PluginInterface {
   private html: HTML;
-
-  getHeaders(): string[] {
-    return [
-      '<link type="text/css" rel="stylesheet" href="/assets/code.css" />',
-      '<script src="/assets/line-link.js"></script>'
-    ];
-  }
-
-  getAssets() {
-    return [
-      resolve(__dirname, "assets/code.css"),
-      resolve(__dirname, "assets/line-link.js")
-    ];
-  }
 
   getDocuments(buildForType?: string): DocumentSectionInterface[] {
     this.html = new HTML();
