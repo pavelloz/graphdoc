@@ -1,3 +1,5 @@
 .vscode
 *.ts
 build
+.tmp/
+gh-pages/
