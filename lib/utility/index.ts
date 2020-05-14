@@ -1,4 +1,4 @@
-export { HTML, split } from "./html";
+export { html, split } from "./html";
 
 export {
   NavigationItem,
