@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const fs = require("fs");
 const path = require("path");
 const url = require("url");
@@ -6,7 +8,7 @@ const exec = require("child_process").exec;
 const pkgDir = require("pkg-dir");
 const request = require("request-promise");
 
-async function init(file_url) {
+export default async function init(file_url) {
   const ROOT_DIR = await pkgDir(__dirname);
   const DOWNLOAD_DIR = `${ROOT_DIR}/.tmp`;
   const mkdir = `mkdir -p ${DOWNLOAD_DIR}`;
@@ -29,5 +31,3 @@ async function init(file_url) {
     });
   });
 }
-
-module.exports = init;
