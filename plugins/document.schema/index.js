@@ -32,10 +32,11 @@ var SchemaPlugin = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     SchemaPlugin.prototype.getDocuments = function (buildForType) {
+        this.html = new utility_1.HTML();
         var code = this.code(buildForType);
         if (code) {
             return [
-                new utility_1.DocumentSection("GraphQL Schema definition", utility_1.html.code(code))
+                new utility_1.DocumentSection("GraphQL Schema definition", this.html.code(code))
             ];
         }
         return [];
@@ -68,13 +69,13 @@ var SchemaPlugin = /** @class */ (function (_super) {
         throw new TypeError("Unexpected type: " + buildForType);
     };
     SchemaPlugin.prototype.argument = function (arg) {
-        return (utility_1.html.property(arg.name) +
+        return (this.html.property(arg.name) +
             ": " +
-            utility_1.html.useIdentifier(arg.type, this.url(arg.type)) // + ' ' + this.deprecated(arg);
+            this.html.useIdentifier(arg.type, this.url(arg.type)) // + ' ' + this.deprecated(arg);
         );
     };
     SchemaPlugin.prototype.argumentLength = function (arg) {
-        return arg.name.length + 1 + utility_1.html.useIdentifierLength(arg.type);
+        return arg.name.length + 1 + this.html.useIdentifierLength(arg.type);
     };
     SchemaPlugin.prototype.arguments = function (fieldOrDirectives) {
         var _this = this;
@@ -104,9 +105,9 @@ var SchemaPlugin = /** @class */ (function (_super) {
     };
     SchemaPlugin.prototype.argumentDescription = function (arg) {
         var desc = arg.description === null
-            ? "[" + utility_1.html.highlight("Not documented") + "]"
+            ? "[" + this.html.highlight("Not documented") + "]"
             : arg.description;
-        return this.description(utility_1.html.highlight(arg.name) + ": " + desc);
+        return this.description(this.html.highlight(arg.name) + ": " + desc);
     };
     SchemaPlugin.prototype.argumentsDescription = function (fieldOrDirectives) {
         var _this = this;
@@ -117,184 +118,189 @@ var SchemaPlugin = /** @class */ (function (_super) {
             return descriptions.concat(_this.argumentDescription(arg));
         };
         return fieldOrDirectives.args.reduce(reduceArguments, [
-            utility_1.html.comment("Arguments")
+            this.html.comment("Arguments")
         ]);
     };
     SchemaPlugin.prototype.description = function (description) {
+        var _this = this;
         if (description) {
             return word_wrap_1.default(description, {
                 width: MAX_CODE_LEN
             })
                 .split("\n")
-                .map(function (l) { return utility_1.html.comment(l); });
+                .map(function (l) { return _this.html.comment(l); });
         }
         return [];
     };
     SchemaPlugin.prototype.directive = function (directive) {
-        return utility_1.html.line(utility_1.html.keyword("directive") +
+        var _this = this;
+        return this.html.line(this.html.keyword("directive") +
             " " +
-            utility_1.html.keyword("@" + directive.name) +
+            this.html.keyword("@" + directive.name) +
             this.arguments(directive) +
             " on " +
             directive.locations
-                .map(function (location) { return utility_1.html.keyword(location); })
+                .map(function (location) { return _this.html.keyword(location); })
                 .join(" | "));
     };
     SchemaPlugin.prototype.enum = function (type) {
         var _this = this;
         var reduceEnumValues = function (lines, enumValue) {
             return lines.concat([""], _this.description(enumValue.description), [
-                utility_1.html.property(enumValue.name)
+                _this.html.property(enumValue.name)
             ]);
         };
-        return (utility_1.html.line(utility_1.html.keyword("enum") + " " + utility_1.html.identifier(type) + " {") +
+        return (this.html.line(this.html.keyword("enum") + " " + this.html.identifier(type) + " {") +
             (type.enumValues || [])
                 .reduce(reduceEnumValues, [])
-                .map(function (line) { return utility_1.html.line(utility_1.html.tab(line)); })
+                .map(function (line) { return _this.html.line(_this.html.tab(line)); })
                 .join("") +
-            utility_1.html.line("}"));
+            this.html.line("}"));
     };
     SchemaPlugin.prototype.field = function (field) {
+        var _this = this;
         var fieldDescription = this.description(field.description);
         var argumentsDescription = this.argumentsDescription(field);
         if (fieldDescription.length > 0 && argumentsDescription.length) {
-            fieldDescription.push(utility_1.html.comment(""));
+            fieldDescription.push(this.html.comment(""));
         }
         var fieldDefinition = field.args.length > 0 && this.fieldLength(field) > MAX_CODE_LEN
             ? // Multiline definition:
              __spreadArrays([
-                utility_1.html.property(field.name) + "("
-            ], this.argumentsMultiline(field).map(function (l) { return utility_1.html.tab(l); }), [
+                this.html.property(field.name) + "("
+            ], this.argumentsMultiline(field).map(function (l) { return _this.html.tab(l); }), [
                 "): " +
-                    utility_1.html.useIdentifier(field.type, this.url(field.type))
+                    this.html.useIdentifier(field.type, this.url(field.type))
             ]) : // Single line
             // fieldName(argumentName: ArgumentType): ReturnType
             [
-                utility_1.html.property(field.name) +
+                this.html.property(field.name) +
                     this.arguments(field) +
                     ": " +
-                    utility_1.html.useIdentifier(field.type, this.url(field.type))
+                    this.html.useIdentifier(field.type, this.url(field.type))
             ];
         return []
             .concat(fieldDescription)
             .concat(argumentsDescription)
             .concat(fieldDefinition)
-            .map(function (line) { return utility_1.html.line(utility_1.html.tab(line)); })
+            .map(function (line) { return _this.html.line(_this.html.tab(line)); })
             .join("");
     };
     SchemaPlugin.prototype.fieldLength = function (field) {
         return (field.name.length +
             this.argumentsLength(field) +
             ": ".length +
-            utility_1.html.useIdentifierLength(field) +
+            this.html.useIdentifierLength(field) +
             " ".length);
     };
     SchemaPlugin.prototype.fields = function (type) {
         var _this = this;
         var fields = "";
-        fields += utility_1.html.line();
+        fields += this.html.line();
         fields += (type.fields || [])
             .filter(function (field) { return !field.isDeprecated; })
             .map(function (field) { return _this.field(field); })
-            .join(utility_1.html.line());
+            .join(this.html.line());
         if (type.fields && type.fields.length > 0) {
-            fields += utility_1.html.line();
+            fields += this.html.line();
         }
         return fields;
     };
     SchemaPlugin.prototype.inputObject = function (type) {
-        return (utility_1.html.line(utility_1.html.keyword("input") + " " + utility_1.html.identifier(type) + " {") +
+        return (this.html.line(this.html.keyword("input") + " " + this.html.identifier(type) + " {") +
             this.inputValues(type.inputFields || []) +
-            utility_1.html.line("}"));
+            this.html.line("}"));
     };
     SchemaPlugin.prototype.inputValues = function (inputValues) {
         var _this = this;
         return inputValues
             .map(function (inputValue) {
-            return utility_1.html.line(utility_1.html.tab(_this.inputValue(inputValue)));
+            return _this.html.line(_this.html.tab(_this.inputValue(inputValue)));
         })
             .join("");
     };
     SchemaPlugin.prototype.inputValue = function (arg) {
+        var _this = this;
         var argDescription = this.description(arg.description);
         return []
             .concat(argDescription)
             .concat([
-            utility_1.html.property(arg.name) +
+            this.html.property(arg.name) +
                 ": " +
-                utility_1.html.useIdentifier(arg.type, this.url(arg.type))
+                this.html.useIdentifier(arg.type, this.url(arg.type))
         ])
-            .map(function (line) { return utility_1.html.line(utility_1.html.tab(line)); })
+            .map(function (line) { return _this.html.line(_this.html.tab(line)); })
             .join("");
     };
     SchemaPlugin.prototype.interfaces = function (type) {
-        return (utility_1.html.line(utility_1.html.keyword("interface") + " " + utility_1.html.identifier(type) + " {") +
+        return (this.html.line(this.html.keyword("interface") + " " + this.html.identifier(type) + " {") +
             this.fields(type) +
-            utility_1.html.line("}"));
+            this.html.line("}"));
     };
     SchemaPlugin.prototype.object = function (type) {
         var _this = this;
         var interfaces = (type.interfaces || [])
-            .map(function (i) { return utility_1.html.useIdentifier(i, _this.url(i)); })
+            .map(function (i) { return _this.html.useIdentifier(i, _this.url(i)); })
             .join(", ");
         var implement = interfaces.length === 0
             ? ""
-            : " " + utility_1.html.keyword("implements") + " " + interfaces;
-        return (utility_1.html.line(utility_1.html.keyword("type") +
+            : " " + this.html.keyword("implements") + " " + interfaces;
+        return (this.html.line(this.html.keyword("type") +
             " " +
-            utility_1.html.identifier(type) +
+            this.html.identifier(type) +
             implement +
             " {") +
             this.fields(type) +
-            utility_1.html.line("}"));
+            this.html.line("}"));
     };
     SchemaPlugin.prototype.scalar = function (type) {
-        return utility_1.html.line(utility_1.html.keyword("scalar") + " " + utility_1.html.identifier(type));
+        return this.html.line(this.html.keyword("scalar") + " " + this.html.identifier(type));
     };
     SchemaPlugin.prototype.schema = function (schema) {
-        var definition = utility_1.html.line(utility_1.html.keyword("schema") + " {");
+        var _this = this;
+        var definition = this.html.line(this.html.keyword("schema") + " {");
         if (schema.queryType) {
             definition +=
-                utility_1.html.line() +
+                this.html.line() +
                     this.description(schema.queryType.description)
-                        .map(function (line) { return utility_1.html.line(utility_1.html.tab(line)); })
+                        .map(function (line) { return _this.html.line(_this.html.tab(line)); })
                         .join("") +
-                    utility_1.html.line(utility_1.html.tab(utility_1.html.property("query") +
+                    this.html.line(this.html.tab(this.html.property("query") +
                         ": " +
-                        utility_1.html.useIdentifier(schema.queryType, this.url(schema.queryType))));
+                        this.html.useIdentifier(schema.queryType, this.url(schema.queryType))));
         }
         if (schema.mutationType) {
             definition +=
-                utility_1.html.line() +
+                this.html.line() +
                     this.description(schema.mutationType.description)
-                        .map(function (line) { return utility_1.html.line(utility_1.html.tab(line)); })
+                        .map(function (line) { return _this.html.line(_this.html.tab(line)); })
                         .join("") +
-                    utility_1.html.line(utility_1.html.tab(utility_1.html.property("mutation") +
+                    this.html.line(this.html.tab(this.html.property("mutation") +
                         ": " +
-                        utility_1.html.useIdentifier(schema.mutationType, this.url(schema.mutationType))));
+                        this.html.useIdentifier(schema.mutationType, this.url(schema.mutationType))));
         }
         if (schema.subscriptionType) {
             definition +=
-                utility_1.html.line() +
+                this.html.line() +
                     this.description(schema.subscriptionType.description)
-                        .map(function (line) { return utility_1.html.line(utility_1.html.tab(line)); })
+                        .map(function (line) { return _this.html.line(_this.html.tab(line)); })
                         .join("") +
-                    utility_1.html.line(utility_1.html.tab(utility_1.html.property("subscription") +
+                    this.html.line(this.html.tab(this.html.property("subscription") +
                         ": " +
-                        utility_1.html.useIdentifier(schema.subscriptionType, this.url(schema.subscriptionType))));
+                        this.html.useIdentifier(schema.subscriptionType, this.url(schema.subscriptionType))));
         }
-        definition += utility_1.html.line("}");
+        definition += this.html.line("}");
         return definition;
     };
     SchemaPlugin.prototype.union = function (type) {
         var _this = this;
-        return utility_1.html.line(utility_1.html.keyword("union") +
+        return this.html.line(this.html.keyword("union") +
             " " +
-            utility_1.html.identifier(type) +
+            this.html.identifier(type) +
             " = " +
             (type.possibleTypes || [])
                 .map(function (eachType) {
-                return utility_1.html.useIdentifier(eachType, _this.url(eachType));
+                return _this.html.useIdentifier(eachType, _this.url(eachType));
             })
                 .join(" | "));
     };

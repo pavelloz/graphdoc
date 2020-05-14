@@ -2,8 +2,11 @@ import { DeepTypeRef, Description, InputValue, TypeRef } from "../interface";
 import { LIST, NON_NULL } from "./introspection";
 
 export class HTML {
+  index = 1;
+
   code(code: string): string {
-    return `<code class="highlight"><ul class="code">${code}</ul></code>`;  }
+    return `<code class="highlight"><table class="code"><tbody>${code}</tbody></table></code>`;
+  }
 
   highlight(text: string): string {
     return `<strong>${text}</strong>`;
@@ -14,7 +17,9 @@ export class HTML {
   }
 
   line(code?: string): string {
-    return `<li>${code}</li>`;
+    const row = this.index++;
+    return `<tr class="row"><td id="L${row}" class="td-index">${row}</td><td id="LC${row}" class="td-code">${code ||
+      ""}</td></tr>`;
   }
 
   tab(code: string): string {
@@ -81,8 +86,6 @@ export class HTML {
       : `<span class="constant numeric">${val}</span>`;
   }
 }
-
-export const html = new HTML;
 
 export function split(text: string, len: number): string[] {
   return text.split(/\s+/).reduce(
