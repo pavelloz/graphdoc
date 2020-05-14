@@ -3,3 +3,6 @@
 build
 .tmp/
 gh-pages/
+test/
+**/__test__/
+example.github.json
