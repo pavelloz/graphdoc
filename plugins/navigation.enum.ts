@@ -10,6 +10,7 @@ export default class NavigationEnums extends Plugin implements PluginInterface {
   getTypes(buildForType: string): NavigationItemInterface[] {
     return this.document.types
       .filter(type => type.kind === ENUM)
+      .filter((d) => !d.name.startsWith("__"))
       .map(
         type =>
           new NavigationItem(

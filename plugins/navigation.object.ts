@@ -18,7 +18,9 @@ export default class NavigationObjects extends Plugin
       );
     });
 
-    return obj.map(
+    return obj
+      .filter((d) => !d.name.startsWith("__"))
+      .map(
       type =>
         new NavigationItem(
           type.name,

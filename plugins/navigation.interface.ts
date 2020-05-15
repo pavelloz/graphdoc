@@ -11,6 +11,7 @@ export default class NavigationInterfaces extends Plugin
   getTypes(buildForType: string): NavigationItemInterface[] {
     return this.document.types
       .filter(type => type.kind === INTERFACE)
+      .filter((d) => !d.name.startsWith("__"))
       .map(
         type =>
           new NavigationItem(

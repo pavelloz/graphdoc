@@ -4,14 +4,16 @@ import { NavigationItem, NavigationSection, Plugin } from "../lib/utility";
 export default class NavigationDirectives extends Plugin
   implements PluginInterface {
   getTypes(buildForType: string): NavigationItemInterface[] {
-    return this.document.directives.map(
-      directive =>
-        new NavigationItem(
-          directive.name,
-          this.url(directive),
-          directive.name === buildForType
-        )
-    );
+    return this.document.directives
+      .filter((d) => !d.name.startsWith("__"))
+      .map(
+        (directive) =>
+          new NavigationItem(
+            directive.name,
+            this.url(directive),
+            directive.name === buildForType
+          )
+      );
   }
 
   getNavigations(buildForType: string) {
