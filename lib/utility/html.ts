@@ -18,7 +18,7 @@ export class HTML {
 
   line(code?: string): string {
     if (!code || (code && code.length < 1)) {
-      return '';
+      return '<tr class="row"><td class="td-index">&nbsp;</td><td class="td-code"></td></tr>';
     }
 
     const row = this.index++;
