@@ -1,9 +1,13 @@
+**/*.d.ts
+
 lib/**/*.js
+!lib/interface.d.ts
+
 plugins/**/*.js
 !plugins/__test__/*.js
 !types/*
+
 .DS_Store
-**/*.d.ts
 node_modules
 .npm
 gh-pages/**/*.html
