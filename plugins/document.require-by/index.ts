@@ -119,10 +119,7 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
       return [
         {
           title: "Required by",
-          description:
-            '<div class="require-by anyone">' +
-            "This element is not required by anyone" +
-            "</div>"
+          description: '{% include "alert/note", content: "This element is not required by anyone" %}'
         }
       ];
     }
