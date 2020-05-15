@@ -1,12 +1,6 @@
 lib/**/*.js
-lib/**/*.d.ts
-
 plugins/**/*.js
-
-
 **/*.d.ts
-
-
 node_modules
 .npm
-gh-pages
+gh-pages/**/*.html
