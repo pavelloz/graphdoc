@@ -1,6 +1,6 @@
 {
   "name": "pos-graphdocs",
-  "version": "2.6.9",
+  "version": "2.6.10",
   "description": "Static page generator for documenting GraphQL Schema",
   "main": "bin/graphdoc",
   "bin": {
@@ -56,7 +56,6 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "slug": "^2.1.1",
-    "striptags": "^3.1.1",
     "word-wrap": "^1.2.3"
   },
   "graphdoc": {

@@ -1,4 +1,3 @@
-import striptags from "striptags";
 import {
   DocumentSectionInterface,
   PluginInterface,
