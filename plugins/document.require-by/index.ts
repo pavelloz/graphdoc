@@ -3,7 +3,7 @@ import {
   DocumentSectionInterface,
   PluginInterface,
   Schema,
-  SchemaType
+  SchemaType,
 } from "../../lib/interface";
 import {
   ENUM,
@@ -13,7 +13,7 @@ import {
   OBJECT,
   Plugin,
   SCALAR,
-  UNION
+  UNION,
 } from "../../lib/utility";
 
 export default class RequireByPlugin extends Plugin implements PluginInterface {
@@ -55,15 +55,15 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
     const deps: string[] = [];
 
     if (Array.isArray(type.interfaces) && type.interfaces.length > 0) {
-      type.interfaces.forEach(i => deps.push(i.name));
+      type.interfaces.forEach((i) => deps.push(i.name));
     }
 
     if (Array.isArray(type.fields) && type.fields.length > 0) {
-      type.fields.forEach(field => {
+      type.fields.forEach((field) => {
         deps.push(getTypeOf(field.type).name);
 
         if (Array.isArray(field.args) && field.args.length > 0) {
-          field.args.forEach(arg => {
+          field.args.forEach((arg) => {
             deps.push(getTypeOf(arg.type).name);
           });
         }
@@ -71,7 +71,7 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
     }
 
     if (Array.isArray(type.inputFields) && type.inputFields.length > 0) {
-      type.inputFields.forEach(field => {
+      type.inputFields.forEach((field) => {
         deps.push(getTypeOf(field.type).name);
       });
     }
@@ -81,7 +81,7 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
       Array.isArray(type.possibleTypes) &&
       type.possibleTypes.length > 0
     ) {
-      type.possibleTypes.forEach(t => {
+      type.possibleTypes.forEach((t) => {
         deps.push(getTypeOf(t).name);
       });
     }
@@ -90,26 +90,18 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
   }
 
   getDescription(type: SchemaType): string {
-    if (!type || !type.name || !type.description) {
-      return '';
+    if (!type || !type.name) {
+      return "";
     }
 
-    return (
-      "<li>" +
-      '<a href="' +
-      this.url(type) +
-      '" title="' +
-      type.name +
-      " - " +
-      striptags(type.description || "").replace(/"/gi, "&quot;") +
-      '">' +
-      type.name +
-      "<em>" +
-      type.description +
-      "</em>" +
-      "</a>" +
-      "<li>"
-    );
+    return `
+        <li>
+          <a href="${this.url(type)}">
+            ${type.name}
+            <em>${type.description}</em>
+          </a>
+        </li>
+      `;
   }
 
   getDocuments(buildForType?: string): DocumentSectionInterface[] {
@@ -123,8 +115,9 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
       return [
         {
           title: "Required by",
-          description: '{% include "alert/note", content: "This element is not required by anyone" %}'
-        }
+          description:
+            '{% include "alert/note", content: "This element is not required by anyone" %}',
+        },
       ];
     }
 
@@ -136,13 +129,13 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
         description:
           '<ul class="require-by">' +
           requireBy
-            .filter(t => {
+            .filter((t) => {
               return used.has(t.name) ? false : used.add(t.name);
             })
-            .map(t => this.getDescription(t))
+            .map((t) => this.getDescription(t))
             .join("") +
-          "</ul>"
-      }
+          "</ul>",
+      },
     ];
   }
 }
