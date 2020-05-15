@@ -1,5 +1,8 @@
 lib/**/*.js
 plugins/**/*.js
+!plugins/__test__/*.js
+!types/*
+
 **/*.d.ts
 node_modules
 .npm
