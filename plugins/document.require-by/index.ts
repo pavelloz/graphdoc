@@ -90,6 +90,10 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
   }
 
   getDescription(type: SchemaType): string {
+    if (!type || !type.name || !type.description) {
+      return '';
+    }
+
     return (
       "<li>" +
       '<a href="' +
