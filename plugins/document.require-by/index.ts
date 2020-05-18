@@ -89,7 +89,7 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
   }
 
   getDescription(type: SchemaType): string {
-    if (!type || !type.name) {
+    if (!type || !type.name || type.name.startsWith("__")) {
       return "";
     }
 
@@ -126,7 +126,7 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
       {
         title: "Required by",
         description:
-          '<ul class="require-by">' +
+          '<ul>' +
           requireBy
             .filter((t) => {
               return used.has(t.name) ? false : used.add(t.name);
