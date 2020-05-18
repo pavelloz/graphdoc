@@ -126,7 +126,7 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
       {
         title: "Required by",
         description:
-          '<ul>' +
+          '<ul class="-ml-4">' +
           requireBy
             .filter((t) => {
               return used.has(t.name) ? false : used.add(t.name);
