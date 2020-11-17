@@ -115,7 +115,7 @@ export default class RequireByPlugin extends Plugin implements PluginInterface {
         {
           title: "Required by",
           description:
-            '{% include "alert/note", content: "This element is not required by anyone" %}',
+            '{% endraw %}{% include "alert/note", content: "This element is not required by anyone" %}{% raw %}',
         },
       ];
     }
