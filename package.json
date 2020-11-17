@@ -1,10 +1,10 @@
 {
   "name": "pos-graphdocs",
-  "version": "2.6.14",
+  "version": "2.6.15",
   "description": "Static page generator for documenting GraphQL Schema",
   "main": "bin/graphdoc",
   "bin": {
-    "graphdoc": "./bin/graphdoc.js"
+    "graphdoc": "bin/graphdoc.js"
   },
   "scripts": {
     "watch": "tsc -w -p .",
